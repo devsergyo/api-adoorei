@@ -30,8 +30,8 @@ class IndexController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function __invoke(Request $request): AnonymousResourceCollection
+    public function __invoke(): AnonymousResourceCollection
     {
-        return ProductResource::collection(($this->productIndexAction)($request));
+        return ProductResource::collection(($this->productIndexAction)());
     }
 }
