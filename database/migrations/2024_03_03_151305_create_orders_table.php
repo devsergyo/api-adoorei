@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('amount',10,2);
+            $table->decimal('amount',10,2)->default(0);
             $table->enum('status', [
                 'created',
                 'canceled',
