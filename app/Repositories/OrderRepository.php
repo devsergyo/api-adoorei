@@ -12,4 +12,9 @@ class OrderRepository implements RepositoryInterface
     {
         return Order::all()->toArray();
     }
+
+    public function getById(int $id): array
+    {
+        return (Order::find($id))->toArray();
+    }
 }
