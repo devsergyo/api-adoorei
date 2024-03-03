@@ -14,6 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthController::class, 'login'])->name('api.login');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+})->name('api.user');
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::name('api.')->middleware('auth:sanctum')->group(function () {
+    Route::prefix('products')->group(function () {
+        Route::get('/', \App\Http\Controllers\Api\Product\IndexController::class);
+    });
 });
