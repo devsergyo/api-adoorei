@@ -4,5 +4,5 @@ namespace App\Interfaces;
 
 interface RepositoryInterface
 {
-    public function getAll(): array;
+    public function getAll();
 }

@@ -16,7 +16,7 @@ class Search
         $this->orderRepository = $orderRepository;
     }
 
-    public function __invoke(array $data): array
+    public function __invoke(array $data)
     {
         return $this->orderRepository->getById($data['id']);
     }

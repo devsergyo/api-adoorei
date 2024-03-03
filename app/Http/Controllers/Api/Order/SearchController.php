@@ -19,7 +19,7 @@ class SearchController extends Controller
     public function __invoke(SearchRequest $request)
     {
         $order = ($this->orderSearchAction)($request->validated());
-        return new OrderResource($order);
+        return OrderResource::collection($order);
     }
 
 }

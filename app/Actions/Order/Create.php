@@ -2,20 +2,22 @@
 
 namespace App\Actions\Order;
 
+use App\Http\Requests\Order\SearchRequest;
 use App\Repositories\OrderRepository;
 
-class Index
+class Create
 {
 
     private OrderRepository $orderRepository;
+
 
     public function __construct(OrderRepository $orderRepository)
     {
         $this->orderRepository = $orderRepository;
     }
 
-    public function __invoke()
+    public function __invoke(array $data)
     {
-        return $this->orderRepository->getAll();
+        return $this->orderRepository->create($data);
     }
 }
