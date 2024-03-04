@@ -18,6 +18,6 @@ class AddProductOrder
 
     public function __invoke(array $data)
     {
-        return $this->orderRepository->addProductsToOrder($data);
+        return $this->orderRepository->addProductsToOrder($data['order_id'],$data['products']);
     }
 }

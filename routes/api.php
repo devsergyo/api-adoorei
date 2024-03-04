@@ -34,5 +34,6 @@ Route::name('api.')->middleware('auth:sanctum')->group(function () {
         Route::post('/', \App\Http\Controllers\Api\Order\SearchController::class);
         Route::post('/create', \App\Http\Controllers\Api\Order\CreateController::class);
         Route::put('/cancel', \App\Http\Controllers\Api\Order\CancelController::class);
+        Route::put('/add-products', \App\Http\Controllers\Api\Order\AddProductOrderController::class);
     });
 });

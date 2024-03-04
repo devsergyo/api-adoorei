@@ -22,7 +22,7 @@ class AddProductOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:orders,id,status,created',
+            'order_id' => 'required|exists:orders,id,status,created',
             'products' => 'required|array',
             'products.*.id' => 'required|integer|exists:products,id',
             'products.*.amount' => 'required|integer|min:1',

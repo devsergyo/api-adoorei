@@ -48,15 +48,13 @@ class OrderRepository implements RepositoryInterface
         return $order->with('products')->first();
     }
 
-    public function addProductsToOrder(int $orderId, array $items)
+    public function addProductsToOrder(int $orderId, array $productData)
     {
         $order = \App\Models\Order::findOrFail($orderId);
-        $productIds = array_column($items, 'id');
+        $productIds = array_column($productData, 'id');
         $products = \App\Models\Product::whereIn('id', $productIds)->get();
 
-        foreach ($items as $item) {
-
-//            verifica se já existe
+        foreach ($productData as $item) {
             $existingProduct = $order->products()->where('product_id', $item['id'])->first();
 
             if ($existingProduct) {
@@ -85,6 +83,7 @@ class OrderRepository implements RepositoryInterface
     {
         $order = Order::find($id);
         $order->status = "canceled";
-        return $order->save();
+        $order->save();
+        return $order->load('products');
     }
 }
