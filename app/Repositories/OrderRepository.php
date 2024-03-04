@@ -56,7 +56,7 @@ class OrderRepository implements RepositoryInterface
 
         $order->products()->attach($productsToAttach);
 
-        return $order->with('products')->first();
+        return $order->load('products');
     }
 
     /**
