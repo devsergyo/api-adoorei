@@ -2,25 +2,36 @@
 
 namespace App\Repositories;
 
-use App\Http\Resources\OrderResource;
 use App\Interfaces\RepositoryInterface;
 use App\Models\Order;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
 
 class OrderRepository implements RepositoryInterface
 {
-
+    /**
+     * Retorna todos os pedidos com os produtos associados.
+     * @return mixed
+     */
     public function getAll()
     {
         return Order::with('products')->get();
     }
 
+    /**
+     * Retorna um pedido específico pelo ID com os produtos associados.
+     * @param int $id
+     * @return mixed
+     */
     public function getById(int $id)
     {
         return Order::with('products')->where(['id' => $id])->get();
     }
 
+    /**
+     * Cria um novo pedido com os produtos fornecidos.
+     * @param array $data
+     * @return mixed
+     */
     public function create(array $data)
     {
         $productIds = array_column($data['products'], 'id');
@@ -48,6 +59,12 @@ class OrderRepository implements RepositoryInterface
         return $order->with('products')->first();
     }
 
+    /**
+     * Adiciona ou atualiza produtos a um pedido existente.
+     * @param int $orderId
+     * @param array $productData
+     * @return mixed
+     */
     public function addProductsToOrder(int $orderId, array $productData)
     {
         $order = \App\Models\Order::findOrFail($orderId);
@@ -79,6 +96,11 @@ class OrderRepository implements RepositoryInterface
         return $order->load('products');
     }
 
+    /**
+     * Cancela um pedido existente, alterando o status para "canceled".
+     * @param int $id
+     * @return mixed
+     */
     public function cancel(int $id)
     {
         $order = Order::find($id);
