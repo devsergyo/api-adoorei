@@ -47,4 +47,44 @@ class OrderRepository implements RepositoryInterface
 
         return $order->with('products')->first();
     }
+
+    public function addProductsToOrder(int $orderId, array $items)
+    {
+        $order = \App\Models\Order::findOrFail($orderId);
+        $productIds = array_column($items, 'id');
+        $products = \App\Models\Product::whereIn('id', $productIds)->get();
+
+        foreach ($items as $item) {
+
+//            verifica se já existe
+            $existingProduct = $order->products()->where('product_id', $item['id'])->first();
+
+            if ($existingProduct) {
+                // Atualiza a quantidade e valores atuais
+                $existingProduct->pivot->amount = $item['amount'];
+                $existingProduct->pivot->price = $products->firstWhere('id', $item['id'])->price;
+                $existingProduct->pivot->save();
+            } else {
+                // Adiciona um novo produto
+                $product = $products->firstWhere('id', $item['id']);
+                $order->products()->attach($product, ['price' => $product->price, 'amount' => $item['amount']]);
+            }
+        }
+
+        // Atualiza o valor total do pedido
+        $order->amount = $order->products->sum(function ($product) {
+            return $product->pivot->price * $product->pivot->amount;
+        });
+        $order->save();
+
+        // Retorna o pedido com os produtos atualizados
+        return $order->load('products');
+    }
+
+    public function cancel(int $id)
+    {
+        $order = Order::find($id);
+        $order->status = "canceled";
+        return $order->save();
+    }
 }
