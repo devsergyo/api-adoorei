@@ -1,0 +1,64 @@
+version: "3.8"
+
+networks:
+    nginx_net:
+        driver: bridge
+services:
+    nginx:
+        image: nginx:1.25.3-alpine3.18
+        restart: unless-stopped
+        tty: true
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+            - ./:/var/www/adoorei-app
+        networks:
+            - nginx_net
+
+    adoorei-app:
+        build:
+            context: ./docker/php
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        tty: true
+        working_dir: /var/www/adoorei-app
+        volumes:
+            - ./:/var/www/adoorei-app
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - nginx_net
+        depends_on:
+            - mysql
+
+    mysql:
+        image: mysql:8.0
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        tty: true
+        volumes:
+            - ./mysql-data:/var/lib/mysql/
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - nginx_net
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: adoorei_app
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: adoorei
+            MYSQL_PASSWORD: adoorei
+
+    phpmyadmin:
+        image: phpmyadmin:5.2
+        restart: always
+        ports:
+            - 8888:80
+        networks:
+            - nginx_net
+        environment:
+            PMA_HOST: mysql
+        depends_on:
+            - mysql
