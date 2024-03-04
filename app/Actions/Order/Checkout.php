@@ -2,10 +2,9 @@
 
 namespace App\Actions\Order;
 
-
 use App\Repositories\OrderRepository;
 
-class Cancel
+class Checkout
 {
 
     private OrderRepository $orderRepository;
@@ -18,6 +17,6 @@ class Cancel
 
     public function __invoke(array $data)
     {
-        return $this->orderRepository->cancel($data['id']);
+        return $this->orderRepository->checkout($data['id']);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Actions\Product;
 
 use App\Repositories\ProductRepository;
-use Illuminate\Database\Eloquent\Collection;
 
 class Index
 {

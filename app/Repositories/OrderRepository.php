@@ -105,7 +105,15 @@ class OrderRepository implements RepositoryInterface
     {
         $order = Order::find($id);
         $order->status = "canceled";
-        $order->save();
-        return $order->load('products');
+
+        return $order->save();
+    }
+
+    public function checkout(int $id)
+    {
+        $order = Order::find($id);
+        $order->status = "paid";
+
+        return $order->save();
     }
 }

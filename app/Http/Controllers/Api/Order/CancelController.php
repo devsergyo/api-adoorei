@@ -19,7 +19,12 @@ class CancelController extends Controller
     public function __invoke(CancelRequest $request)
     {
         $order = ($this->orderCancelAction)($request->validated());
-        return OrderResource::collection($order);
+
+        if ($order){
+            return response()->json(null, 204);
+        }else{
+            return response()->json(['error' => 'Registro não encontrado'], 404);
+        }
     }
 
 }

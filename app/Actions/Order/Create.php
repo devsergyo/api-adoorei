@@ -2,7 +2,7 @@
 
 namespace App\Actions\Order;
 
-use App\Http\Requests\Order\SearchRequest;
+
 use App\Repositories\OrderRepository;
 
 class Create
